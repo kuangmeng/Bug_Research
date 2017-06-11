@@ -175,14 +175,12 @@ public class Eclipse_Bug_Report{
              // 遍历属性节点  
              for (Attribute attr : list){  
             	 	if(attr.getName().equals("id")){
-                        System.out.println("report\'s "+attr.getName() + "为：" + attr.getValue());  
                         bug_id = Integer.parseInt(attr.getValue());
             	 	}
              }  
              Iterator<Element> con = n.elementIterator();
              while(con.hasNext()){
          	 	Element e = con.next();
-            	 	System.out.println(e.getName()+"内容为："+e.getText());
             	 	if(e.getName().equals("opening_time")){
             	 		time = Integer.parseInt(e.getText());
             	 	}else if(e.getName().equals("reporter")){
@@ -193,5 +191,4 @@ public class Eclipse_Bug_Report{
         }
        }
     }  
-    
 }  

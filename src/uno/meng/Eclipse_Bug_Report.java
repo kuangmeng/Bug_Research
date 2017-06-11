@@ -56,9 +56,9 @@ public class Eclipse_Bug_Report{
     	        //获取根节点元素对象  
     	        Element node = document.getRootElement();  
     	        if(node.getName().equals("reports")){
-    	        	//	ReadReportsXML(node,flag);
+    	        		ReadReportsXML(node,flag);
     	        }else if(node.getName().equals("cc")){
-    	        		
+    	        		ReadCCXML(node,flag);
     	        }else{
     	        		//遍历所有的元素节点  
     	        		ReadXML(node,flag,tag);  
@@ -85,12 +85,86 @@ public class Eclipse_Bug_Report{
         }
         return filelist;
     }
-	/** 
-     * 遍历当前节点元素下面的所有(元素的)子节点 
-     *  
-     * @param node 
-     */  
-    public static void ReadXML(Element node,int flag,int tag){  
+
+    public static void ReadXML(Element node,int flag,int tag) throws SQLException{  
+    		String when = null;
+    		String what = null;
+    		int bug_id = 0;
+    	 // 当前节点下面子节点迭代器  
+       Iterator<Element> it = node.elementIterator(); 
+        // 获取当前节点的所有属性节点 
+       while(it.hasNext()){
+    	   Element n = it.next();
+        if(n.getName().equals("report")){
+        	    List<Attribute> list = n.attributes();  
+             // 遍历属性节点  
+             for (Attribute attr : list){  
+            	 	if(attr.getName().equals("id")){
+                        bug_id = Integer.parseInt(attr.getValue());
+            	 	}
+             }  
+             Iterator<Element> con = n.elementIterator();
+             while(con.hasNext()){
+         	 	Element e = con.next();
+            	 	if(e.getName().equals("update")){
+            	 		Iterator<Element> tmp = e.elementIterator();
+            	 		while(tmp.hasNext()){
+            	 			Element t = tmp.next();
+            	 			if(t.getName().equals("when")){
+            	 				when = t.getText();
+            	 			}else{
+            	 				what = t.getText();
+            	 			}
+            	 		}
+            	 		cuid.InsertOthers(bug_id,flag,tag,when,what);
+            	 	}
+             }
+        }
+       }
+    }  
+    
+    public static void ReadCCXML(Element node,int flag) throws SQLException{  
+		String when = null;
+		String what = null;
+		int bug_id = 0;
+	 // 当前节点下面子节点迭代器  
+   Iterator<Element> it = node.elementIterator(); 
+    // 获取当前节点的所有属性节点 
+   while(it.hasNext()){
+	   Element n = it.next();
+    if(n.getName().equals("report")){
+    	    List<Attribute> list = n.attributes();  
+         // 遍历属性节点  
+         for (Attribute attr : list){  
+        	 	if(attr.getName().equals("id")){
+                    bug_id = Integer.parseInt(attr.getValue());
+        	 	}
+         }  
+         Iterator<Element> con = n.elementIterator();
+         while(con.hasNext()){
+     	 	Element e = con.next();
+        	 	if(e.getName().equals("update")){
+        	 		Iterator<Element> tmp = e.elementIterator();
+        	 		while(tmp.hasNext()){
+        	 			Element t = tmp.next();
+        	 			if(t.getName().equals("when")){
+        	 				when = t.getText();
+        	 			}else{
+        	 				what = t.getText();
+        	 			}
+        	 		}
+        	 		if(!what.equals("") && what != null){
+        	 			cuid.InsertCC(bug_id,flag,when,what);
+        	 		}
+        	 	}
+         }
+    }
+   }
+}  
+    public static void ReadReportsXML(Element node,int flag) throws SQLException{  
+    		int bug_id = 0;
+    		int time = 0;
+    		String reporter = null;
     	 // 当前节点下面子节点迭代器  
        Iterator<Element> it = node.elementIterator(); 
         // 获取当前节点的所有属性节点 
@@ -102,60 +176,22 @@ public class Eclipse_Bug_Report{
              for (Attribute attr : list){  
             	 	if(attr.getName().equals("id")){
                         System.out.println("report\'s "+attr.getName() + "为：" + attr.getValue());  
+                        bug_id = Integer.parseInt(attr.getValue());
             	 	}
              }  
              Iterator<Element> con = n.elementIterator();
              while(con.hasNext()){
          	 	Element e = con.next();
-            	 	if(e.getName().equals("update")){
-            	 		Iterator<Element> tmp = e.elementIterator();
-            	 		while(tmp.hasNext()){
-            	 			Element t = tmp.next();
-            	 			System.out.println(t.getName()+"内容："+t.getText());
-            	 		}
+            	 	System.out.println(e.getName()+"内容为："+e.getText());
+            	 	if(e.getName().equals("opening_time")){
+            	 		time = Integer.parseInt(e.getText());
+            	 	}else if(e.getName().equals("reporter")){
+            	 		reporter = e.getText();
             	 	}
              }
+            cuid.Insert(bug_id,time,flag,reporter);
         }
        }
     }  
-//    
-//    /** 
-//     * 遍历reports.xml当前节点元素下面的所有(元素的)子节点 
-//     *  
-//     * @param node 
-//     * @throws SQLException 
-//     */  
-//    public static void ReadReportsXML(Element node,int flag) throws SQLException{  
-//    		int bug_id = 0;
-//    		int time = 0;
-//    		String reporter = null;
-//    	 // 当前节点下面子节点迭代器  
-//       Iterator<Element> it = node.elementIterator(); 
-//        // 获取当前节点的所有属性节点 
-//       while(it.hasNext()){
-//    	   Element n = it.next();
-//        if(n.getName().equals("report")){
-//        	    List<Attribute> list = n.attributes();  
-//             // 遍历属性节点  
-//             for (Attribute attr : list){  
-//            	 	if(attr.getName().equals("id")){
-//                        System.out.println("report\'s "+attr.getName() + "为：" + attr.getValue());  
-//                        bug_id = Integer.parseInt(attr.getValue());
-//            	 	}
-//             }  
-//             Iterator<Element> con = n.elementIterator();
-//             while(con.hasNext()){
-//         	 	Element e = con.next();
-//            	 	System.out.println(e.getName()+"内容为："+e.getText());
-//            	 	if(e.getName().equals("opening_time")){
-//            	 		time = Integer.parseInt(e.getText());
-//            	 	}else if(e.getName().equals("reporter")){
-//            	 		reporter = e.getText();
-//            	 	}
-//             }
-//            cuid.Insert(bug_id,time,flag,reporter);
-//        }
-//       }
-//    }  
     
 }  

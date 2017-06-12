@@ -36,7 +36,7 @@ public class CUID {
 		sql = "select * from "+table[flag]+"_Extra where BUG_ID = "+bug_id+" and TIME = "+Integer.parseInt(when)+" and PRISON = \'"+what+"\'";//SQL语句  
         System.out.println(sql);
 		pst = conn.prepareStatement(sql);//准备执行语句
-		try {  
+		try{  
             ret = pst.executeQuery();//执行语句，得到结果集  
             while (ret.next()){  
             		return true;
@@ -118,5 +118,34 @@ public class CUID {
 	        		System.out.println("Insert Insert 出错！");
 	        }
 		}	 
+	 }
+	 public ResultSet SearchDESC(int flag) throws SQLException{
+		 sql = "select `DESC`,`SEVERITY` from "+table[flag];//SQL语句  
+	    // System.out.println(sql);
+		pst = conn.prepareStatement(sql);//准备执行语句
+		try{  
+			ret = pst.executeQuery();//执行语句，得到结果集  
+	         while (ret.next()){  
+	           		return ret;
+	            }//显示数据  
+	    } catch (SQLException e) {  
+	        	System.out.println("SearchDESC 出错！");
+	        	return null;
+	    }
+        return null;
+	 }
+	 public ResultSet SearchTime(int flag) throws SQLException{
+		 sql = "select `TIME` from "+table[flag];//SQL语句  
+		pst = conn.prepareStatement(sql);//准备执行语句
+		try{  
+			ret = pst.executeQuery();//执行语句，得到结果集  
+	         while (ret.next()){  
+	           		return ret;
+	            }//显示数据  
+	    } catch (SQLException e) {  
+	        	System.out.println("SearchTime 出错！");
+	        	return null;
+	    }
+        return null;
 	 }
 }

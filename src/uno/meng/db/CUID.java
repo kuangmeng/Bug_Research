@@ -135,7 +135,22 @@ public class CUID {
         return null;
 	 }
 	 public ResultSet SearchTime(int flag) throws SQLException{
-		 sql = "select `TIME` from "+table[flag];//SQL语句  
+		 sql = "select `TIME` from "+table[flag] +" where `STATUS` = \'NEW\'";//SQL语句  
+		pst = conn.prepareStatement(sql);//准备执行语句
+		try{  
+			ret = pst.executeQuery();//执行语句，得到结果集  
+	         while (ret.next()){  
+	           		return ret;
+	            }//显示数据  
+	    } catch (SQLException e) {  
+	        	System.out.println("SearchTime 出错！");
+	        	return null;
+	    }
+        return null;
+	 }
+	 
+	 public ResultSet SearchSeverity(int flag) throws SQLException{
+		 sql = "select `PRIORITY`,`SEVERITY` from "+table[flag];//SQL语句  
 		pst = conn.prepareStatement(sql);//准备执行语句
 		try{  
 			ret = pst.executeQuery();//执行语句，得到结果集  

@@ -1,9 +1,13 @@
 package uno.meng.db;
 
+import java.io.FileWriter;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class CUID {
 	static DBHelper db = new DBHelper();  
@@ -162,5 +166,118 @@ public class CUID {
 	        	return null;
 	    }
         return null;
+	 }
+	 public List<int[]> SearchD(int flag) throws SQLException{
+		 sql = "select `TIME`,`BUG_ID` from "+table[flag]+" WHERE STATUS = \'NEW\'";//SQL语句
+		pst = conn.prepareStatement(sql);//准备执行语句
+		List<int[]> list = new ArrayList<int[]>();
+		try{  
+			ret = pst.executeQuery();//执行语句，得到结果集  
+	         while (ret.next()){  
+	    		 	String sql2 = "select `TIME` from "+table[flag]+" WHERE STATUS is NULL and `BUG_ID` = "+ret.getInt(2);//SQL语句
+	    		 	pst = conn.prepareStatement(sql2);//准备执行语句
+	    		 	ResultSet rets = pst.executeQuery();//执行语句，得到结果集
+	    		 	int fp = 0;
+	    		 	while(rets.next()){
+	    		 		fp = rets.getInt(1);
+	    		 	}
+	    			 String sql3 = "select `TIME` from "+table[flag]+" WHERE STATUS = \'RESOLVED\' and `BUG_ID` = "+ret.getInt(2);//SQL语句
+	    			 pst = conn.prepareStatement(sql3);//准备执行语句  
+	    			 ResultSet retss = pst.executeQuery();//执行语句，得到结果集
+	    			 int jj = 0;
+	    			 while(retss.next()){
+	    				 jj = retss.getInt(1);
+	    			 }
+	    			 if(fp - ret.getInt(1) > 0 && jj - fp >0){
+	    				 list.add(new int[]{ret.getInt(2),fp-ret.getInt(1),jj-fp});
+	    			 }
+	         }//显示数据  
+	         return list;
+	    } catch (SQLException e) {  
+	        	System.out.println("SearchD 出错！");
+	        	return null;
+	    }
+	 }
+	 
+	 public int[][] SearchOS(int flag) throws SQLException{
+		 sql = "select `OS`,`SEVERITY` from "+table[flag];//SQL语句  
+		pst = conn.prepareStatement(sql);//准备执行语句
+		try{  
+			ret = pst.executeQuery();//执行语句，得到结果集  
+			int[][] Matrix = new int[3][6]; 
+			for(int i = 0;i<3;i++){
+				for(int j =0;j<6;j++){
+					Matrix[i][j] = 0;
+				}
+			}
+	         while (ret.next()){  
+	           		int col = -1,row = -1;
+	           		if(ret.getString(2) ==  null || ret.getString(2).equals("") || ret.getString(1) ==  null || ret.getString(1).equals("")){
+	           			continue;
+	           		}
+	           		switch(ret.getString(2)){
+					case "trivial":
+						col = 0;
+						break;
+					case "minor":
+						col = 1;
+						break;
+					case "normal":
+						col = 2;
+						break;
+					case "major":
+						col = 3;
+						break;
+					case "critical":
+						col = 4;
+						break;
+					case "blocker":
+						col = 5;
+						break;
+					default:
+						break;
+					}
+	           		if(ret.getString(1).contains("Mac") || ret.getString(1).contains("All")){
+	           			row = 0;
+	           		}else if(ret.getString(1).contains("Linux") || ret.getString(1).contains("All")){
+	           			row = 1;
+	           		}else if(ret.getString(1).contains("Windows") || ret.getString(1).contains("All")){
+	           			row = 2;
+	           		}
+	           		if(row >= 0 && col >= 0){
+	           			Matrix[row][col]+=1;
+	           		}
+	            }//显示数据 
+	         for(int i=0;i<3;i++){
+	        	 	for(int j=0;j<6;j++){
+	        	 		System.out.print(Matrix[i][j]+"\t");
+	        	 	}
+	        	 System.out.println();
+	         }
+	         return Matrix;
+	    } catch (SQLException e) {  
+	        	System.out.println("SearchOS 出错！");
+	        	return null;
+	    }
+	 }
+	 public boolean SearchReOpened(int flag) throws SQLException, IOException{
+		 sql = "select `DESC` from "+table[flag]+" where `STATUS` = \'REOPENED\'";//SQL语句  
+		pst = conn.prepareStatement(sql);//准备执行语句
+		try{  
+			ret = pst.executeQuery();//执行语句，得到结果集 
+       	    FileWriter fw = new FileWriter("data/desc_re/"+table[flag]+"_reopened.txt");   
+	         while (ret.next()){  
+	            	   if(ret.getString(1) == null){
+	            	    	   		continue;
+	            	       }else{
+	            	    	   		fw.write(ret.getString(1)+"\r\n");  
+	            	       }   
+	            } 
+             fw.close();   
+	         return true;
+	    } catch (SQLException e) {  
+	        	System.out.println("SearchReOpened 出错！");
+	        	return false;
+	    }
 	 }
 }

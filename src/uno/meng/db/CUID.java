@@ -189,7 +189,7 @@ public class CUID {
 	    				 jj = retss.getInt(1);
 	    			 }
 	    			 if(fp - ret.getInt(1) > 0 && jj - fp >0){
-	    				 list.add(new int[]{ret.getInt(2),fp-ret.getInt(1),jj-fp});
+	    				 list.add(new int[]{fp-ret.getInt(1),jj-fp});
 	    			 }
 	         }//显示数据  
 	         return list;

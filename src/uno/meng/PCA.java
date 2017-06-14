@@ -9,17 +9,12 @@ import org.jblas.Eigen;
 
 import uno.meng.db.CUID;
 public class PCA {
-     /**
-      * Reduce matrix dimension     减少矩阵维度
-      * @param source         源矩阵
-      * @param dimension       目标维度
-      * @return Target matrix     返回目标矩阵
-      */ 
     static String[] table = new String[]{"CDT","JDT","PDE","Platform"};
 	static CUID cuid = new CUID();
 	static List<int[]> list = new ArrayList<int[]>();
     public static void main(String[] args) throws SQLException{
 	    	for(int i=0;i<4;i++){
+	    	    Linear line = new Linear();
 		     System.out.println("对 "+table[i]+" 部分分析结果： ");
 	    		list = null;
 	    		list = cuid.SearchD(i);
@@ -31,8 +26,10 @@ public class PCA {
 	    		}
 	        DoubleMatrix d = new DoubleMatrix(matrix);
 	        DoubleMatrix result = PCA.dimensionReduction(d, 2);
-	        
-	        System.out.println(result);
+	        for(int k = 0;k<result.columns;k++){
+		        line.addDataPoint(new double[]{result.get(0,k),result.get(1,k)});
+	        }
+	        line.printLine(line);
 	    	}
     }
     public static DoubleMatrix dimensionReduction(DoubleMatrix source, int dimension) {
@@ -66,10 +63,6 @@ public class PCA {
         @Override
         public int compareTo(PCABean o) {
             return Double.compare(o.eigenValue, eigenValue);
-        }
-        @Override
-        public String toString() {
-            return "PCABean [eigenValue=" + eigenValue + ", vector=" + vector + "]";
         }
     }
 }

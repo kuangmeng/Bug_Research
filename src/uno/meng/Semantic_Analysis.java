@@ -51,9 +51,7 @@ public class Semantic_Analysis {
 		String whitespaceTokenizerLine[] = WhitespaceTokenizer.INSTANCE.tokenize(line);
 		String[] tags = tagger.tag(whitespaceTokenizerLine);
 		for(int i=0;i<tags.length;i++){
-			//System.out.println(tags[i]);
 			if(tags[i].equals("VBG") || tags[i].equals("MD") || tags[i].equals("NN") || tags[i].equals("NNS") || tags[i].equals("VBZ") || tags[i].equals("RB") || tags[i].equals("JJ")){
-				//System.out.println(whitespaceTokenizerLine[i]);
 				list.add(whitespaceTokenizerLine[i]);
 			}
 		}

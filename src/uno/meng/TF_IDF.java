@@ -12,7 +12,6 @@ public class TF_IDF {
    
     private static ArrayList<String> FileList = new ArrayList<String>(); // the list of file
     static String[] table = new String[]{"CDT","JDT","PDE","Platform"};
-    //get list of file for the directory, including sub-directory of it
     public static List<String> readDirs(String filepath) throws FileNotFoundException, IOException{
         try{
             File file = new File(filepath);
@@ -50,7 +49,6 @@ public class TF_IDF {
     
     //word segmentation
     public static ArrayList<String> cutWords(String file) throws IOException{
-        
         ArrayList<String> words = new ArrayList<String>();
         String text = TF_IDF.readFile(file);
         @SuppressWarnings("resource")
@@ -58,7 +56,6 @@ public class TF_IDF {
         words = analyzer.split(text);
         return words;
     }
-    
     //term frequency in a file, times for each word
     public static HashMap<String, Integer> normalTF(ArrayList<String> cutwords){
         HashMap<String, Integer> resTF = new HashMap<String, Integer>();
@@ -72,7 +69,6 @@ public class TF_IDF {
         }
         return resTF;
     }
-    
     //term frequency in a file, frequency of each word
     public static HashMap<String, Float> tf(ArrayList<String> cutwords){
         HashMap<String, Float> resTF = new HashMap<String, Float>();
@@ -86,7 +82,6 @@ public class TF_IDF {
         }
         return resTF;
     } 
-    
     //tf times for file
     public static HashMap<String, HashMap<String, Integer>> normalTFAllFiles(String dirc) throws IOException{
         HashMap<String, HashMap<String, Integer>> allNormalTF = new HashMap<String, HashMap<String,Integer>>();

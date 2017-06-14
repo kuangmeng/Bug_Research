@@ -17,7 +17,6 @@ import java.util.TreeMap;
 /**
  * a word set
  *
- * @author hankcs
  */
 public class Vocabulary
 {
@@ -65,14 +64,13 @@ public class Vocabulary
         id2wordMap = nArray;
     }
 
-    private void loseWeight()
-    {
+    @SuppressWarnings("unused")
+	private void loseWeight(){
         if (size() == id2wordMap.length) return;
         resize(word2idMap.size());
     }
 
-    public int size()
-    {
+    public int size(){
         return word2idMap.size();
     }
 

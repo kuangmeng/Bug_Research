@@ -38,7 +38,8 @@ public class TF_IDF {
     public static String readFile(String file) throws FileNotFoundException, IOException {
         StringBuffer strSb = new StringBuffer(); //String is constant， StringBuffer can be changed.
         InputStreamReader inStrR = new InputStreamReader(new FileInputStream(file), "UTF-8"); //byte streams to character streams
-        BufferedReader br = new BufferedReader(inStrR); 
+        @SuppressWarnings("resource")
+		BufferedReader br = new BufferedReader(inStrR); 
         String line = br.readLine();
         while(line != null){
             strSb.append(line).append("\r\n");
@@ -52,7 +53,8 @@ public class TF_IDF {
         
         ArrayList<String> words = new ArrayList<String>();
         String text = TF_IDF.readFile(file);
-        IKAnalyzer analyzer = new IKAnalyzer();
+        @SuppressWarnings("resource")
+		IKAnalyzer analyzer = new IKAnalyzer();
         words = analyzer.split(text);
         return words;
     }
@@ -76,9 +78,10 @@ public class TF_IDF {
         HashMap<String, Float> resTF = new HashMap<String, Float>();
         int wordLen = cutwords.size();
         HashMap<String, Integer> intTF = TF_IDF.normalTF(cutwords); 
-        Iterator iter = intTF.entrySet().iterator(); //iterator for that get from TF
+        Iterator<?> iter = intTF.entrySet().iterator(); //iterator for that get from TF
         while(iter.hasNext()){
-            Map.Entry entry = (Map.Entry)iter.next();
+            @SuppressWarnings("rawtypes")
+			Map.Entry entry = (Map.Entry)iter.next();
             resTF.put(entry.getKey().toString(), Float.parseFloat(entry.getValue().toString()) / wordLen);
         }
         return resTF;
@@ -114,9 +117,10 @@ public class TF_IDF {
         int docNum = FileList.size();
         for(int i = 0; i < docNum; i++){
             HashMap<String, Float> temp = all_tf.get(FileList.get(i));
-            Iterator iter = temp.entrySet().iterator();
+            Iterator<?> iter = temp.entrySet().iterator();
             while(iter.hasNext()){
-                Map.Entry entry = (Map.Entry)iter.next();
+                @SuppressWarnings("rawtypes")
+				Map.Entry entry = (Map.Entry)iter.next();
                 String word = entry.getKey().toString();
                 if(dict.get(word) == null){
                     dict.put(word, 1);
@@ -125,9 +129,10 @@ public class TF_IDF {
                 }
             }
         }
-        Iterator iter_dict = dict.entrySet().iterator();
+        Iterator<?> iter_dict = dict.entrySet().iterator();
         while(iter_dict.hasNext()){
-            Map.Entry entry = (Map.Entry)iter_dict.next();
+            @SuppressWarnings("rawtypes")
+			Map.Entry entry = (Map.Entry)iter_dict.next();
             float value = (float)Math.log(docNum / Float.parseFloat(entry.getValue().toString()));
             resIdf.put(entry.getKey().toString(), value);
         }
@@ -140,9 +145,10 @@ public class TF_IDF {
             String filepath = FileList.get(i);
             HashMap<String, Float> tfidf = new HashMap<String, Float>();
             HashMap<String, Float> temp = all_tf.get(filepath);
-            Iterator iter = temp.entrySet().iterator();
+            Iterator<?> iter = temp.entrySet().iterator();
             while(iter.hasNext()){
-                Map.Entry entry = (Map.Entry)iter.next();
+                @SuppressWarnings("rawtypes")
+				Map.Entry entry = (Map.Entry)iter.next();
                 String word = entry.getKey().toString();
                 Float value = (float)Float.parseFloat(entry.getValue().toString()) * idfs.get(word); 
                 tfidf.put(word, value);
@@ -153,14 +159,17 @@ public class TF_IDF {
         DisTfIdf(resTfIdf);
     }
     public static void DisTfIdf(HashMap<String, HashMap<String, Float>> tfidf){
-        Iterator iter1 = tfidf.entrySet().iterator();
+        Iterator<?> iter1 = tfidf.entrySet().iterator();
         while(iter1.hasNext()){
-            Map.Entry entrys = (Map.Entry)iter1.next();
+            @SuppressWarnings("rawtypes")
+			Map.Entry entrys = (Map.Entry)iter1.next();
             System.out.println("文件： " + entrys.getKey().toString());
-            HashMap<String, Float> temp = (HashMap<String, Float>) entrys.getValue();
-            Iterator iter2 = temp.entrySet().iterator();
+            @SuppressWarnings("unchecked")
+			HashMap<String, Float> temp = (HashMap<String, Float>) entrys.getValue();
+            Iterator<?> iter2 = temp.entrySet().iterator();
             while(iter2.hasNext()){
-                Map.Entry entry = (Map.Entry)iter2.next(); 
+                @SuppressWarnings("rawtypes")
+				Map.Entry entry = (Map.Entry)iter2.next(); 
                 System.out.println(entry.getKey().toString() + " = " + entry.getValue().toString() + ", ");
             }
         }

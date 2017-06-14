@@ -1,14 +1,25 @@
 package uno.meng;
 
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Random;
+
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+
 import uno.meng.db.*;
-public class K_means {
-    static String[] table = new String[]{"CDT","JDT","PDE","Platform"};
+public class K_means extends JFrame{
+	private static final long serialVersionUID = 1L;
+	static String[] table = new String[]{"CDT","JDT","PDE","Platform"};
 	private int k;// 分成多少簇
 	private int m;// 迭代次数
+	static MyPanel mp = null;
+	static int flag = -1;
+	static double[][] graph = new double[3][2];
 	private int dataSetLength;// 数据集元素个数，即数据集的长度
 	private ArrayList<float[]> dataSet;// 数据集链表
 	private ArrayList<float[]> center;// 中心链表
@@ -238,6 +249,8 @@ public class K_means {
 		for (int i = 0; i < dataArray.size(); i++) {
 			System.out.println(dataArrayName + "[" + i + "]={"
 					+ dataArray.get(i)[0] + "," + dataArray.get(i)[1] + "}");
+			graph[i][0] =  dataArray.get(i)[0];
+			graph[i][1] = dataArray.get(i)[1];
 		}
 		System.out.println("===================================");
 	}
@@ -254,6 +267,7 @@ public class K_means {
 			// 误差不变了，分组完成
 			if (m != 0) {
 				if (jc.get(m) - jc.get(m - 1) == 0) {
+					draw(graph,flag);
 					break;
 				}
 			}
@@ -265,12 +279,21 @@ public class K_means {
 		}
 		System.out.println("迭代次数："+m);//输出迭代次数
 	}
+	public void draw(double[][] graph,int flag){
+		mp = new MyPanel(graph);  
+        this.add(mp);  
+        this.setSize(500,500);  
+        this.setVisible(true);  
+        this.setTitle(table[flag]+"聚类结果");
+        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); 
+	}
 	/**
 	 * 执行算法
 	 * @throws SQLException 
 	 */
 	public static void main(String[] args) throws SQLException{
 		for(int i =0;i<4;i++){
+			flag = i;
 			System.out.println("对 "+table[i]+" 部分分析结果： ");
 			rs = null;
 			rs = cuid.SearchSeverity(i);
@@ -280,3 +303,58 @@ public class K_means {
 		}
 	}
 }
+
+class MyPanel extends JPanel{  
+	private static final long serialVersionUID = 1L;
+	double[][] graph;
+	public MyPanel(double[][] graph){
+		this.graph = graph;
+	}
+    //覆盖JPanel的paint方法  
+    //Graphics是绘图的重要类，可以理解成一支画笔  
+    public void paint(Graphics g){  
+        //1.调用父类函数完成初始化  
+        super.paintComponent(g);
+		Graphics2D g2d = (Graphics2D) g;
+		int x = 100;
+		int y = 100;
+		int[] pox ={ 90, 100, 100 };
+		int[] poy ={ 110, 90, 100 };
+		int[] poxx ={110, 100, 100 };
+		int[] poyy ={ 110, 90, 100 };
+		int[] poxB = {387,397,407};
+		int[] poyB = {390,400,400};
+		int[] poxBB = {387,397,407};
+		int[] poyBB = {410,400,400};
+		g2d.setColor(Color.black);
+		g2d.fillRect(99, 100, 2, 300);
+		g2d.fillRect(99, 400, 300, 2);
+		g2d.fillRect(82, 402, 15, 15);
+		g2d.setColor(Color.blue);
+		g2d.fillRect((int)Math.round(100+30*graph[0][0]),(int)Math.round(400-30*graph[0][1]),5,5);
+		g2d.setColor(Color.green);
+		g2d.fillRect((int)Math.round(100+30*graph[1][0]),(int)Math.round(400-30*graph[1][1]),5,5);
+		g2d.setColor(Color.red);
+		g2d.fillRect((int)Math.round(100+30*graph[2][0]),(int)Math.round(400-30*graph[2][1]),5,5);
+		g2d.setColor(Color.black);
+		for (int i = 0; i < 13; i++){
+			g2d.drawLine(100 + i * 15, 300 + y, y + i * 15, y + 120);
+			g2d.drawLine(100, 300 + y - i * 15, y + 180, y + 300 - i * 15);
+			if (i % 2 == 0 && i / 2 != 0){
+				g2d.drawString(String.valueOf(i / 2), x - 20, 405 - i / 2 * 30);
+				g2d.drawString(String.valueOf(i / 2), x - 5 + i / 2 * 30, 420);
+			}
+		}
+		g2d.setColor(Color.white);
+		g2d.drawString("0", 85, 415);
+		g2d.setColor(Color.black);
+		g2d.drawString("Y", 80, 140);
+		g2d.drawString("X", 420, 420);
+		g2d.fillPolygon(pox,poy,3);
+		g2d.fillPolygon(poxx,poyy,3);
+		g2d.fillPolygon(poxB,poyB,3);
+		g2d.fillPolygon(poxBB,poyBB,3);
+		g2d.dispose();
+    }  
+}  
+

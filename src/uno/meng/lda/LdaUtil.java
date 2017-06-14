@@ -13,24 +13,13 @@ package uno.meng.lda;
 
 import java.util.*;
 
-/**
- * @author hankcs
- */
-public class LdaUtil
-{
-    /**
-     * To translate a LDA matrix to readable result
-     * @param phi the LDA model
-     * @param vocabulary
-     * @param limit limit of max words in a topic
-     * @return a map array
-     */
-    public static Map<String, Double>[] translate(double[][] phi, Vocabulary vocabulary, int limit)
-    {
+public class LdaUtil{
+ 
+    public static Map<String, Double>[] translate(double[][] phi, Vocabulary vocabulary, int limit){
         limit = Math.min(limit, phi[0].length);
-        Map<String, Double>[] result = new Map[phi.length];
-        for (int k = 0; k < phi.length; k++)
-        {
+        @SuppressWarnings("unchecked")
+		Map<String, Double>[] result = new Map[phi.length];
+        for (int k = 0; k < phi.length; k++){
             Map<Double, String> rankMap = new TreeMap<Double, String>(Collections.reverseOrder());
             for (int i = 0; i < phi[k].length; i++)
             {

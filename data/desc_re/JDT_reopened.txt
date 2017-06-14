@@ -1,0 +1,25 @@
+Improve code template variable naming
+Drop to frame on a static method drops one too far
+UI freezes because of hyperlink detector
+[ast rewrite] Add paranoiac paranthesis does not detect comments
+[prefs] NPEs in log during tests
+[projection] Bizarre folding behavior
+[navigation] Ctrl+O should use FilteredTree was: Outline popup slow in OS X
+[search] NPE when trying to find references to field variable
+[compiler][null] incorrect null analysis involving catch blocks (multiple throw points)
+[preferences] Code folding has completely disappeared
+problem exporting the Install runtimes in WSAD 5.1.2
+[build path] Linking source to project should always be available
+[api] make fiunctionality of JavaProjectWizardFirstPage API
+[1.5][compiler] improve message on nameclash when overriding method with "wildcard" parameter
+[quick fix] Undoing Rename Compilation Unit QuickFix leads to errors
+[clean up] Remove parentheses is too aggressive
+pkg-info.java javadoc should use fully qualified names
+[breadcrumb] CVS decoration freezes eclipse if many elements to decorate in drop down
+[compare] [common navigator] duplicate changes in model compare (folder and source folder)
+Rename refactoring broken
+[compiler] NPE in missing type reporting
+[package explorer] JDT error behavior when "link with editor" option opening
+[generalize type] Generalize Declared Type fails with array-valued annotation member variable
+[hovering] Some text in Javadoc hover/view not visible using Ubuntu 10.04
+[compiler][null]Dont optimize code gen based on static analysis (dead code)

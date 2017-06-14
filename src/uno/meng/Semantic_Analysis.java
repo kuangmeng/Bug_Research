@@ -45,7 +45,6 @@ public class Semantic_Analysis {
 			System.out.println("对 "+table[i]+" 部分分析结果： 准确率"+(count[i]+0.0)/num[i]);
 		}
 	}
-	
 	public static List<String> POSTag(String line) throws IOException {
 		List<String> list = new ArrayList<String>();
 		String whitespaceTokenizerLine[] = WhitespaceTokenizer.INSTANCE.tokenize(line);
@@ -57,7 +56,6 @@ public class Semantic_Analysis {
 		}
 		return list;
 	}
-	
 	public static boolean Judge(List<String> list,String severity){
 		String judge[] = {"reliable Error compare should","empty very no not symbolic Common confuses so ClassCastException same assertion failures indexer ","Disassembly missing incorrectly overflow"};
 		String mark[] = {"trivial","minor","normal","major","critical","blocker"};

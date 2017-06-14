@@ -7,7 +7,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import uno.meng.db.CUID;
-
 /**
  *         皮尔逊相关度评价
  */
@@ -47,7 +46,7 @@ public class Pearson_Correlation {
 		return dataset;
 	}
 	/*
-	 * @return 皮尔逊相关度值
+	 * 皮尔逊相关度值
 	 */
 	public double sim_pearson(String parameter1, String parameter2) {
 		List<String> list = new ArrayList<String>();

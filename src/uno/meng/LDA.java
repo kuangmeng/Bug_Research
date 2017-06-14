@@ -13,7 +13,6 @@ import uno.meng.lda.LdaUtil;
 import uno.meng.lda.Vocabulary;
 
 /**
- * a set of documents
  * 语料库，也就是文档集合
  */
 public class LDA{
@@ -48,10 +47,6 @@ public class LDA{
         sb.append(vocabulary);
         return sb.toString();
     }
-
-    /**
-     * Load documents from disk
-     */
     public static LDA load(String folderPath) throws IOException{
         LDA lDA = new LDA();
         File folder = new File(folderPath);

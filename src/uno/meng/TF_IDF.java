@@ -8,8 +8,7 @@ import org.wltea.analyzer.lucene.IKAnalyzer;
 
 import uno.meng.db.CUID;
 
-public class TF_IDF {
-   
+public class TF_IDF{
     private static ArrayList<String> FileList = new ArrayList<String>(); // the list of file
     static String[] table = new String[]{"CDT","JDT","PDE","Platform"};
     public static List<String> readDirs(String filepath) throws FileNotFoundException, IOException{
@@ -32,8 +31,6 @@ public class TF_IDF {
         }
         return FileList;
     }
-    
-    //read file
     public static String readFile(String file) throws FileNotFoundException, IOException {
         StringBuffer strSb = new StringBuffer(); //String is constant， StringBuffer can be changed.
         InputStreamReader inStrR = new InputStreamReader(new FileInputStream(file), "UTF-8"); //byte streams to character streams
@@ -46,8 +43,6 @@ public class TF_IDF {
         }
         return strSb.toString();
     }
-    
-    //word segmentation
     public static ArrayList<String> cutWords(String file) throws IOException{
         ArrayList<String> words = new ArrayList<String>();
         String text = TF_IDF.readFile(file);
@@ -56,7 +51,6 @@ public class TF_IDF {
         words = analyzer.split(text);
         return words;
     }
-    //term frequency in a file, times for each word
     public static HashMap<String, Integer> normalTF(ArrayList<String> cutwords){
         HashMap<String, Integer> resTF = new HashMap<String, Integer>();
         for(String word : cutwords){
@@ -69,7 +63,6 @@ public class TF_IDF {
         }
         return resTF;
     }
-    //term frequency in a file, frequency of each word
     public static HashMap<String, Float> tf(ArrayList<String> cutwords){
         HashMap<String, Float> resTF = new HashMap<String, Float>();
         int wordLen = cutwords.size();
@@ -82,7 +75,6 @@ public class TF_IDF {
         }
         return resTF;
     } 
-    //tf times for file
     public static HashMap<String, HashMap<String, Integer>> normalTFAllFiles(String dirc) throws IOException{
         HashMap<String, HashMap<String, Integer>> allNormalTF = new HashMap<String, HashMap<String,Integer>>();
         List<String> filelist = TF_IDF.readDirs(dirc);
@@ -94,7 +86,6 @@ public class TF_IDF {
         }    
         return allNormalTF;
     }
-    //tf for all file
     public static HashMap<String,HashMap<String, Float>> tfAllFiles(String dirc) throws IOException{
         HashMap<String, HashMap<String, Float>> allTF = new HashMap<String, HashMap<String, Float>>();
         List<String> filelist = TF_IDF.readDirs(dirc);

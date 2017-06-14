@@ -28,28 +28,15 @@ public class K_means extends JFrame{
 	private Random random;
 	static CUID cuid = new CUID();
 	static ResultSet rs = null;
-	/**
-	 * 设置需分组的原始数据集
-	 */
 	public void setDataSet(ArrayList<float[]> dataSet) {
 		this.dataSet = dataSet;
 	}
-	/**
-	 * 获取结果分组
-	 */
 	public ArrayList<ArrayList<float[]>> getCluster() {
 		return cluster;
 	}
-	/**
-	 * 构造函数，传入需要分成的簇数量
-	 */
 	public K_means(int k) {
 		this.k = k;
 	}
-	/**
-	 * 初始化
-	 * @throws SQLException 
-	 */
 	private void init() throws SQLException {
 		m = 0;
 		random = new Random();
@@ -62,10 +49,6 @@ public class K_means extends JFrame{
 		cluster = initCluster();
 		jc = new ArrayList<Float>();
 	}
-	/**
-	 * 如果调用者未初始化数据集，则采用内部测试数据集
-	 * @throws SQLException 
-	 */
 	private void initDataSet(ResultSet rs) throws SQLException {
 		dataSet = new ArrayList<float[]>();
 		while(rs.next()){
@@ -151,9 +134,6 @@ public class K_means extends JFrame{
 		}
 		return center;
 	}
-	/**
-	 * 初始化簇集合
-	 */
 	private ArrayList<ArrayList<float[]>> initCluster() {
 		ArrayList<ArrayList<float[]>> cluster = new ArrayList<ArrayList<float[]>>();
 		for (int i = 0; i < k; i++) {
@@ -161,9 +141,6 @@ public class K_means extends JFrame{
 		}
 		return cluster;
 	}
-	/**
-	 * 计算两个点之间的距离
-	 */
 	private float distance(float[] element, float[] center) {
 		float distance = 0.0f;
 		float x = element[0] - center[0];
@@ -172,9 +149,6 @@ public class K_means extends JFrame{
 		distance = (float) Math.sqrt(z);
 		return distance;
 	}
-	/**
-	 * 获取距离集合中最小距离的位置
-	 */
 	private int minDistance(float[] distance) {
 		float minDistance = distance[0];
 		int minLocation = 0;
@@ -191,9 +165,6 @@ public class K_means extends JFrame{
 		}
 		return minLocation;
 	}
-	/**
-	 * 核心，将当前元素放到最小距离中心相关的簇中
-	 */
 	private void clusterSet() {
 		float[] distance = new float[k];
 		for (int i = 0; i < dataSetLength; i++) {
@@ -204,18 +175,12 @@ public class K_means extends JFrame{
 			cluster.get(minLocation).add(dataSet.get(i));// 核心，将当前元素放到最小距离中心相关的簇中
 		}
 	}
-	/**
-	 * 求两点误差平方的方法
-	 */
 	private float errorSquare(float[] element, float[] center) {
 		float x = element[0] - center[0];
 		float y = element[1] - center[1];
 		float errSquare = x * x + y * y;
 		return errSquare;
 	}
-	/**
-	 * 计算误差平方和准则函数方法
-	 */
 	private void countRule() {
 		float jcF = 0;
 		for (int i = 0; i < cluster.size(); i++) {
@@ -225,9 +190,6 @@ public class K_means extends JFrame{
 		}
 		jc.add(jcF);
 	}
-	/**
-	 * 设置新的簇中心方法
-	 */
 	private void setNewCenter() {
 		for (int i = 0; i < k; i++) {
 			int n = cluster.get(i).size();
@@ -256,7 +218,6 @@ public class K_means extends JFrame{
 	}
 	/**
 	 * Kmeans算法核心过程方法
-	 * @throws SQLException 
 	 */
 	private void kmeans() throws SQLException {
 		init();
@@ -289,7 +250,6 @@ public class K_means extends JFrame{
 	}
 	/**
 	 * 执行算法
-	 * @throws SQLException 
 	 */
 	public static void main(String[] args) throws SQLException{
 		for(int i =0;i<4;i++){
@@ -299,7 +259,7 @@ public class K_means extends JFrame{
 			rs = cuid.SearchSeverity(i);
 			K_means k = new K_means(3);
 			k.kmeans();
-			System.out.println("*******************************\n\n*******************************");
+			System.out.println("*******************************\n*******************************");
 		}
 	}
 }

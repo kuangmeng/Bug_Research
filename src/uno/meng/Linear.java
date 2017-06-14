@@ -30,9 +30,6 @@ public class Linear{
     private int pn;  
     /** true if coefficients valid */  
     private boolean coefsValid;  
-    /** 
-     * Constructor. 
-     */  
     public Linear() {  
         XMax = 0;  
         YMax = 0;  
@@ -119,53 +116,31 @@ public class Linear{
         ++pn;  
         coefsValid = false;  
     }  
-  
-    /** 
-     * Return the value of the regression line function at x. (Implementation of 
-     * Evaluatable.) 
-     *  
-     * @param x 
-     *            the value of x 
-     * @return the value of the function at x 
-     */  
     public float at(int x) {  
         if (pn < 2)  
             return Float.NaN;  
-  
         validateCoefficients();  
         return a0 + a1 * x;  
     }  
-  
-    /** 
-     * Reset. 
-     */  
     public void reset() {  
         pn = 0;  
         sumX = sumY = sumXX = sumXY = 0;  
         coefsValid = false;  
     }  
-  
-    /** 
-     * Validate the coefficients. 计算方程系数 y=ax+b 中的a 
-     */  
     private void validateCoefficients() {  
         if (coefsValid)  
             return;  
-  
         if (pn >= 2) {  
             float xBar = (float) sumX / pn;  
             float yBar = (float) sumY / pn;  
-  
             a1 = (float) ((pn * sumXY - sumX * sumY) / (pn * sumXX - sumX  
                     * sumX));  
             a0 = (float) (yBar - a1 * xBar);  
         } else {  
             a0 = a1 = Float.NaN;  
         }  
-  
         coefsValid = true;  
     }  
-  
     /** 
      * 返回误差 
      */  
@@ -182,13 +157,10 @@ public class Linear{
         E = 1 - sumDeltaY2 / sst;  
         return round(E, 4);  
     }  
-  
     // 用于实现精确的四舍五入  
     public double round(double v, int scale) {  
-  
         if (scale < 0) {  
-            throw new IllegalArgumentException(  
-                    "The scale must be a positive integer or zero");  
+        		System.out.println("0除错误！"); 
         }  
         BigDecimal b = new BigDecimal(Double.toString(v));  
         BigDecimal one = new BigDecimal("1");  

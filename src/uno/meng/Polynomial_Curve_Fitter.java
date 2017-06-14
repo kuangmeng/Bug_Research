@@ -98,7 +98,6 @@ public class Polynomial_Curve_Fitter  extends JFrame{
 		  return coeff;
 		}
 }
-
 class MyPanel2 extends JPanel{  
 	private static final long serialVersionUID = 1L;
 	private static final double WIDTH = 1350;  
